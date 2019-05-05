@@ -1,0 +1,255 @@
+<html>
+<head>
+    <title>Vue.js Pet Depot</title>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js">
+    </script>
+
+</head>
+<div id="app">
+    <header>
+    </header>
+    <main>
+
+        <div v-else>
+            <div class="row">
+
+        <button class="btn btn-primary btn-lg"
+                v-on:click="addToCart"
+                v-if="canAddToCart">Add to cart</button>
+        <button disabled="true" class="btn btn-primary btn-lg"
+                v-else >Add to cart</button>
+        <span class="inventory-message"
+              v-if="product.availableInventory - cartItemCount < 5">
+
+
+        <button class="btn btn-primary btn-lg"
+                v-on:click="addToCart"
+                v-if="canAddToCart">Add to cart</button>
+        <button disabled="true" class="btn btn-primary btn-lg"
+                v-else >Add to cart</button>
+        <span class="inventory-message"
+              v-if="product.availableInventory - cartItemCount === 0">All Out!
+         </span>
+        <span class="inventory-message"
+              v-else-if="product.availableInventory - cartItemCount < 5">
+              Only {{product.availableInventory - cartItemCount}} left!
+        </span>
+        <span class="inventory-message"
+              v-else>Buy Now!
+        </span>
+
+        <span class="inventory-message"
+              v-else>Buy Now!
+        </span>
+        <div class="rating">
+            <span v-for="n in 5"></span>
+        </div>
+        <span class="inventory-message"
+              v-else>Buy Now!
+        </span>
+        <div class="rating">
+          <span  v-bind:class="{'rating-active': checkRating(n)}"
+                 v-for="n in 5">
+            </span>
+        </div>
+
+        <div v-if="showProduct">
+            <div class="row product">
+
+                <div v-if="showProduct">
+                    <div v-for="product in products">
+                        <div class="row">
+                            <div class="col-md-5 col-md-offset-0">
+                                <figure>
+                                    <img class="product" v-bind:src="product.image">
+                                </figure>
+                            </div>
+                            <div class="col-md-6 col-md-offset-0 description">
+                                ...
+                            </div><!-- end of row-->
+                            <hr />
+                        </div><!-- end of v-for-->
+                    </div><!-- end of showProduct-->
+                    <span class="inventory-message"
+                          v-else>Buy Now!
+            </span>
+                    <div class="rating">
+              <span  v-bind:class="{'rating-active': checkRating(n, product)}"
+                     v-for="n in 5" >
+              </span>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg"
+                            v-on:click="addToCart(product)"
+                            v-if="canAddToCart(product)">Add to cart</button>
+
+                    //5.19
+                    addToCart(aProduct) {
+                    this.cart.push( aProduct.id );
+                    },
+                    <span class="inventory-message"
+                          v-if="product.availableInventory - cartCount(product.id) === 0">
+                          All Out!
+                    </span>
+                    <span class="inventory-message"
+                          v-else-if="product.availableInventory - cartCount(product.id) < 5">
+                           Only {{product.availableInventory - cartCount(product.id)}} left!
+                    </span>
+                    <span class="inventory-message"
+                          v-else>Buy Now!
+                    </span>
+
+                    <div v-if="showProduct">
+                        <div v-for="product in sortedProducts">
+                            <div class="row">
+
+    </main>
+</div>
+<script type="text/javascript">
+    var APP_LOG_LIFECYCLE_EVENTS = true;
+    var webstore = new Vue({
+        el: '#app',
+        data: {
+            sitename: "Vue.js Pet Depot",
+            showProduct: true,
+            product: {
+                id: 1001,
+                title: "Cat Food, 25lb bag",
+                description: "A 25 pound bag of <em>irresistible</em>, organic goodness for your cat.",
+                price: 2000,
+                image: "cat.png",
+                availableInventory: 10,
+                rating: 3
+            }
+        },
+        methods: {
+            checkRating(n, myProduct) {
+                return this.myproduct.rating - n >= 0;
+            },
+            created: function() {
+                axios.get('./products.json')
+                    .then((response) =>{
+                        this.products=response.data.products;
+                        console.log(this.products);
+                    });
+            },
+
+            // business: 'Business Address',
+            // home: 'Home Address',
+            // gift:'',
+            // sendGift: 'Send As A Gift',
+            // dontSendGift: 'Do Not Send As A Gift'
+            // },
+            // products: [],
+            //
+
+
+            canAddToCart(aProduct) {
+                return aProduct.availableInventory > this.cartCount(aProduct.id);
+            },
+            cartCount(id) {
+                let count = 0;
+                for(var i = 0; i < this.cart.length; i++) {
+                    if (this.cart[i] === id) {
+                        count++;
+                    }
+                }
+                return count;
+            },
+            sortedProducts() {
+                if (this.products.length > 0) {
+                    let productsArray = this.products.slice(0);
+
+                    function compare(a, b) {
+                        if (a.title.toLowerCase() < b.title.toLowerCase())
+                            return -1;
+                        if (a.title.toLowerCase() > b.title.toLowerCase())
+                            return 1;
+                        return 0;
+                    }
+
+                    return productsArray.sort(compare);
+                }
+        }}
+</script>
+
+
+
+
+
+
+
+
+
+
+<script t ype="text/javascript">
+    var APP_LOG_LIFECYCLE_EVENTS = true
+    var webstore = new Vue({
+        el: '#app',
+        data: {
+            sitename: "Vue.js Pet Depot",
+            showProduct: true,
+            order: {
+                firstName: '',
+                lastName: '',
+                address: '',
+                city: '',
+                zip: '',
+                state: '',
+                method: 'Home Address',
+                business: 'Business Address',
+                home: 'Home Address',
+                gift: 'Send As A Gift',
+                sendGift: 'Send As A Gift',
+                dontSendGift:'Do Not Send As A Gift'
+            },
+            states:{
+                AL: 'Alabama',
+                AR: 'Arizona',
+                CA: 'California',
+                NV: 'Nevada'
+            },
+            product: {
+                id: 1001,
+                title: "Cat Food, 25lb bag",
+                description: "A 25 pound bag of <em>irresistible</em>," +
+                    "organic goodness for your cat.",
+                price: "$20.00",
+                image: "cat.png",
+                availableInventory: 10,
+                rating: 3
+            },
+            cart: []
+        },
+
+        methods: {
+            submitForm() {
+                alert('Submitted');
+            },
+            addToCart: function() {
+                this.cart.push ( this.product.id ) ;
+            },
+            showCheckout() {
+                this.showProduct = this.showProduct ? false : true;
+            },
+            checkRating(n) {
+                return this.product.rating - n >= 0;
+            }
+        },
+        computed: {
+            cartItemCount: function() {
+                return this.cart.length || '';
+            },
+            canAddToCart: function() {
+                return this.product.availableInventory > this.cartItemCount;
+            }
+        }
+    })
+</script>
+
+</body>
+</html>
